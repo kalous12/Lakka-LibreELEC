@@ -27,6 +27,9 @@ This project is for Rockchip SoC devices
 * [ROC-RK3399-PC](devices/RK3399)
 * [Rockchip Sapphire Board](devices/RK3399)
 
+**RK3568**
+* [LubanCat](devices/RK3568)
+
 **My single-board computer is not listed, will it be added in the future?**<br />
 If your single-board computer uses a current generation SoC listed on http://opensource.rock-chips.com/wiki_Main_Page the odds are in your favor.
 

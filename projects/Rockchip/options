@@ -5,11 +5,9 @@
   # Bootloader to use (syslinux / u-boot / bcm2835-bootloader)
     BOOTLOADER="u-boot"
 
-  # U-Boot make target
-    UBOOT_TARGET="u-boot-dtb.bin"
-
   # U-Boot firmware package(s) to use
     UBOOT_FIRMWARE="rkbin"
+    UBOOT_FIT_IMAGE="u-boot-rockchip.bin"
 
   # Additional kernel make parameters (for example to specify the u-boot loadaddress)
     KERNEL_MAKE_EXTRACMD="dtbs"
@@ -29,14 +27,11 @@
     PROJECT_CFLAGS=""
 
   # SquashFS compression method (gzip / lzo / xz / zstd)
-    SQUASHFS_COMPRESSION="zstd"
+    SQUASHFS_COMPRESSION="gzip"
 
 ################################################################################
 # setup project defaults
 ################################################################################
-
-  # build and install ALSA Audio support (yes / no)
-    ALSA_SUPPORT="yes"
 
   # OpenGL(X) implementation to use (no / mesa)
     OPENGL="no"
@@ -44,15 +39,18 @@
   # OpenGL-ES implementation to use (no / libmali / mesa)
     OPENGLES="${OPENGLES:-mesa}"
 
-  # Displayserver to use (weston / no)
+  # Vulkan implementation to use (vulkan-loader / no)
+    VULKAN="no"
+
+  # Displayserver to use (wl / no)
     DISPLAYSERVER="no"
 
-  # Windowmanager to use (fluxbox / none)
-    WINDOWMANAGER="none"
+  # Windowmanager to use (weston / no)
+    WINDOWMANAGER="no"
 
-  # Xorg Graphic drivers to use (all / i915,r300,r600,nvidia)
+  # Xorg Graphic drivers to use (all / lima,panfrost)
   # Space separated list is supported,
-  # e.g. GRAPHIC_DRIVERS="i915 r300 r600 radeonsi nvidia"
+  # e.g. GRAPHIC_DRIVERS="lima panfrost"
     GRAPHIC_DRIVERS=""
 
   # KODI Player implementation to use (default / bcm2835-driver / libfslvpuwrap)
@@ -61,7 +59,7 @@
   # additional Firmware to use (dvb-firmware, misc-firmware, wlan-firmware)
   # Space separated list is supported,
   # e.g. FIRMWARE="dvb-firmware misc-firmware wlan-firmware"
-    FIRMWARE="misc-firmware wlan-firmware dvb-firmware brcmfmac_sdio-firmware"
+    FIRMWARE=""
 
   # additional packages to install
     ADDITIONAL_PACKAGES+=" dtc"
@@ -78,10 +76,6 @@
   # build and install driver addons (yes / no)
     DRIVER_ADDONS_SUPPORT="no"
 
-    if [ "${DISTRO}" = "Lakka" ]; then
-      DRIVER_ADDONS_SUPPORT="no"
-    fi
-
   # driver addons to install:
   # for a list of additinoal drivers see packages/linux-driver-addons
   # Space separated list is supported,
@@ -89,10 +83,4 @@
 
   # debug tty path
     DEBUG_TTY="/dev/ttyS2"
-
-  # Overrides for Lakka
-    if [ "${DISTRO}" = "Lakka" ]; then
-      LINUX="rockchip"
-      FIRMWARE="${FIRMWARE//dvb-firmware/}"
-    fi
 
