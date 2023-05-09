@@ -84,7 +84,6 @@ targets="\
 	Allwinner|R40|arm|image \
 	Amlogic|AMLGX|aarch64|image \
 	Ayn|Odin|aarch64|image \
-	Generic||i386|image \
 	Generic||x86_64|image \
 	L4T|Switch|aarch64|image \
 	NXP|iMX6|arm|image \
@@ -92,6 +91,7 @@ targets="\
 	Rockchip|RK3288|arm|image \
 	Rockchip|RK3328|aarch64|image \
 	Rockchip|RK3399|aarch64|image \
+	Rockchip|RK3568|aarch64|image \
 	RPi|GPICase|arm|image \
 	RPi|Pi02GPi|arm|image \
 	RPi|RPi|arm|noobs \
