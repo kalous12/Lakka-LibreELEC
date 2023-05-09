@@ -35,7 +35,8 @@ post_makeinstall_target() {
   #   ln -sfv /var/lib/libmali/libmali.so ${INSTALL}/usr/lib/libmali.so
   # fi
 
-  cp -rfp ${ROOT}/${PROJECT}/${DEVICE}/gpu/* ${INSTALL}
+  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr /home/zerok/Lakka/build.Lakka-RK3568.aarch64/image/system
+  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr /home/zerok/Lakka/build.Lakka-RK3568.aarch64/toolchain/aarch64-libreelec-linux-gnueabi/sysroot
   echo hell0
 }
 
