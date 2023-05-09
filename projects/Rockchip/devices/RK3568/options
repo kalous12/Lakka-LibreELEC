@@ -25,7 +25,7 @@
 
   # Kernel target
     KERNEL_TARGET="Image"
-
+	  OPENGLES="libmali"
   # Mali GPU family
     MALI_FAMILY="g52"
     GRAPHIC_DRIVERS="panfrost"
