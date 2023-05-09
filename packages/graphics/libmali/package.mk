@@ -35,12 +35,12 @@ post_makeinstall_target() {
   #   ln -sfv /var/lib/libmali/libmali.so ${INSTALL}/usr/lib/libmali.so
   # fi
 
-  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr /home/zerok/Lakka/build.Lakka-RK3568.aarch64/image/system
-  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr /home/zerok/Lakka/build.Lakka-RK3568.aarch64/toolchain/aarch64-libreelec-linux-gnueabi/sysroot
-  echo hell0
+  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
 }
 
 post_install() {
-  # enable_service libmali-setup.service
-  echo hell0
+
+  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
+  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
+
 }
