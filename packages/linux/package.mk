@@ -27,6 +27,12 @@ case "${LINUX}" in
     PKG_URL="https://github.com/raspberrypi/linux/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
     ;;
+  rk356x)
+    PKG_VERSION="279a845e0213fb8c8a7e79a26e54437206f03b9d" # lubancat 4.19
+    PKG_SHA256="8752b97c272919da4568f05fc8f61c0795b002ce52249e58dc1ce222b2ca372c"
+    PKG_URL="https://github.com/LubanCat/kernel/archive/${PKG_VERSION}.tar.gz"
+    PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
+    ;;
   L4T)
     PKG_VERSION=${DEVICE}
     PKG_URL="l4t-kernel-sources"
