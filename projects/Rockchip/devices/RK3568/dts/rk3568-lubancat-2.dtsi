@@ -16,23 +16,20 @@
 #include "rk3568.dtsi"
 
 //MIPI摄像头配置
-// #include "rk3568-lubancat-csi2.dtsi"
+#include "rk3568-lubancat-csi2.dtsi"
 
 // MIPI屏幕设置，通用镜像使用设备树插件
 //专用镜像如果要开启MIPI屏幕支持，按屏幕型号开启1-3
 //以下3个配置互斥，不可同时开启
 // #include "rk3568-lubancat-dsi0-ebf410125_720p.dtsi" //野火5.5寸 720P
 // #include "rk3568-lubancat-dsi0-ebf410125_1080p.dtsi" //野火5.5寸 1080P
-// #include "rk3568-lubancat-dsi0-rpi.dtsi" //树莓派 5寸 800x480
+//#include "rk3568-lubancat-dsi0-rpi.dtsi" //树莓派 5寸 800x480
 
 
 / {
 	model = "EmbedFire LubanCat-2";
 	compatible = "embedfire,lubancat-2", "rockchip,rk3568";
 
-	// chosen: chosen {
-	// 	bootargs = "earlycon=uart8250,mmio32,0xfe660000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rw rootwait";
-	// };
 
 	fiq-debugger {
 		compatible = "rockchip,fiq-debugger";
@@ -155,6 +152,29 @@
 		regulator-name = "vcc5v0_otg_vbus";
 	};
 
+	mini_pcie_3v3: mini-pcie-3v3-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "minipcie_3v3";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		regulator-always-on;
+		gpio = <&gpio3 RK_PC3 GPIO_ACTIVE_HIGH>;
+		startup-delay-us = <5000>;
+		vin-supply = <&vcc5v0_sys>;
+	};
+
+	pcie30_3v3: gpio-regulator {
+		compatible = "regulator-gpio";
+		regulator-name = "pcie30_3v3";
+		regulator-min-microvolt = <100000>;
+		regulator-max-microvolt = <3300000>;
+		gpios = <&gpio0 RK_PD4 GPIO_ACTIVE_HIGH>;
+		gpios-states = <0x1>;
+		states = <100000 0x0
+			  3300000 0x1>;
+	};
+
 	mipi_dsi0_power: mipi-dsi0-power-regulator {
 		compatible = "regulator-fixed";
 		enable-active-high;
@@ -163,6 +183,48 @@
 		pinctrl-0 = <&mipi_dsi0_pwr_en>;
 		regulator-name = "mipi_dsi0_power";
 		regulator-always-on;
+	};
+
+	vdd_cam_5v: vdd-cam-5v-regulator {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_cam_5v";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpio3 RK_PA4 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cam_pwr_en>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
+	cam_dovdd: cam-dovdd {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_dovdd";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		vin-supply = <&vdd_cam_5v>;
+	};
+
+	cam_avdd: cam-avdd {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_avdd";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <2800000>;
+		regulator-max-microvolt = <2800000>;
+		vin-supply = <&vdd_cam_5v>;
+	};
+
+	cam_dvdd: cam-dvdd {
+		compatible = "regulator-fixed";
+		regulator-name = "cam_dvdd";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <1200000>;
+		regulator-max-microvolt = <1200000>;
+		vin-supply = <&vdd_cam_5v>;
 	};
 
 	leds: leds {
@@ -210,6 +272,13 @@
 		io-channels = <&saradc 1>;
 	};
 
+	ext_cam_clk: external-camera-clock {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <24000000>;
+		clock-output-names = "CLK_CAMERA1_24MHZ";
+	};
+
 	backlight: backlight {
 		status = "okay";
 		compatible = "pwm-backlight";
@@ -250,6 +319,10 @@
 		>;
 		default-brightness-level = <200>;
 	};
+
+	test-power {
+		status = "okay";
+	};
 };
 
 &saradc {
@@ -276,8 +349,6 @@
 	status = "okay";
 };
 
-
-
 &cpu0 {
 	cpu-supply = <&vdd_cpu>;
 };
@@ -301,39 +372,13 @@
 	status = "okay";
 };
 
-&dmc_opp_table {
-	opp-324000000 {
-		opp-hz = /bits/ 64 <324000000>;
-		opp-microvolt = <875000>;
-		opp-microvolt-L0 = <875000>;
-		opp-microvolt-L1 = <850000>;
-	};
-
-	opp-528000000 {
-		opp-hz = /bits/ 64 <528000000>;
-		opp-microvolt = <875000>;
-		opp-microvolt-L0 = <875000>;
-		opp-microvolt-L1 = <850000>;
-	};
-
-	opp-528000000 {
-		opp-hz = /bits/ 64 <780000000>;
-		opp-microvolt = <875000>;
-		opp-microvolt-L0 = <875000>;
-		opp-microvolt-L1 = <850000>;
-	};
-
-	opp-1560000000 {
-		opp-hz = /bits/ 64 <1560000000>;
-		opp-microvolt = <900000>;
-		opp-microvolt-L0 = <900000>;
-		opp-microvolt-L1 = <850000>;
-	};
-};
-
 &gpu {
 	mali-supply = <&vdd_gpu>;
 	status = "okay";
+};
+
+&xin32k {
+	status = "disabled";
 };
 
 &i2c0 {
@@ -355,7 +400,24 @@
 			regulator-off-in-suspend;
 		};
 	};
+/*
+	vdd_cpu: syr827@40 {
+		compatible = "silergy,syr827";
+		reg = <0x40>;
+		fcs,suspend-voltage-selector = <1>;
+		regulator-name = "vdd_cpu";
+		regulator-min-microvolt = <712500>;
+		regulator-max-microvolt = <1390000>;
+		regulator-ramp-delay = <2300>;
+		regulator-always-on;
+		regulator-boot-on;
+		vin-supply = <&vcc5v0_sys>;
 
+		regulator-state-mem {
+			regulator-off-in-suspend;
+		};
+	};
+*/
 	rk809: pmic@20 {
 		compatible = "rockchip,rk809";
 		reg = <0x20>;
@@ -619,6 +681,25 @@
 			status = "okay";
 		};
 	};
+
+	hdmi_sound: hdmi-sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,mclk-fs = <128>;
+		simple-audio-card,name = "rockchip,hdmi";
+		status = "okay";
+
+		simple-audio-card,cpu {
+			sound-dai = <&i2s0_8ch>;
+		};
+		simple-audio-card,codec {
+			sound-dai = <&hdmi>;
+		};
+	};
+};
+
+&i2s0_8ch {
+    status = "okay";
 };
 
 &i2c1 {
@@ -685,6 +766,7 @@
 	status = "okay";
 };
 
+
 &sdhci {
 	bus-width = <8>;
 	supports-emmc;
@@ -737,13 +819,13 @@
 &vp0 {
 	rockchip,plane-mask = <(1 << ROCKCHIP_VOP2_CLUSTER0 | 1 << ROCKCHIP_VOP2_ESMART0 | 1 << ROCKCHIP_VOP2_SMART0)>;
 	rockchip,primary-plane = <ROCKCHIP_VOP2_SMART0>;
-	cursor-win-id = <ROCKCHIP_VOP2_CLUSTER0>;
+	// cursor-win-id = <ROCKCHIP_VOP2_CLUSTER0>;
 };
 
 &vp1 {
 	rockchip,plane-mask = <(1 << ROCKCHIP_VOP2_CLUSTER1 | 1 << ROCKCHIP_VOP2_ESMART1 | 1 << ROCKCHIP_VOP2_SMART1)>;
 	rockchip,primary-plane = <ROCKCHIP_VOP2_SMART1>;
-	cursor-win-id = <ROCKCHIP_VOP2_CLUSTER1>;
+	// cursor-win-id = <ROCKCHIP_VOP2_CLUSTER1>;
 };
 
 &rng {
@@ -811,6 +893,10 @@
 	maximum-speed = "high-speed";
 	snps,dis_u2_susphy_quirk;
 	status = "okay";	
+};
+
+&sata0 {
+	status = "okay";
 };
 
 /* USB3.0 Host */
@@ -899,9 +985,30 @@
 	};
 };
 
+&pcie30phy {
+	status = "okay";
+};
+
+&pcie3x2 {
+	reset-gpios = <&gpio2 RK_PD6 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&pcie30_3v3>;
+	status = "okay";
+};
+
+/* mini pcie */
+&pcie2x1 {
+	reset-gpios = <&gpio3 RK_PC1 GPIO_ACTIVE_HIGH>;
+	disable-gpios = <&gpio3 RK_PC2 GPIO_ACTIVE_HIGH>;
+	vpcie3v3-supply = <&mini_pcie_3v3>;
+	status = "okay";
+};
+
 &combphy2_psq {
 	status = "okay";
 };
+
+
+
 
 &route_hdmi {
 	status = "okay";

@@ -28,8 +28,8 @@ case "${LINUX}" in
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
     ;;
   rk356x)
-    PKG_VERSION="279a845e0213fb8c8a7e79a26e54437206f03b9d" # lubancat 4.19
-    PKG_SHA256="8752b97c272919da4568f05fc8f61c0795b002ce52249e58dc1ce222b2ca372c"
+    PKG_VERSION="899d93c7891719481686c54f08f1342448f1a041" # lubancat 4.19
+    PKG_SHA256="a42280b3a1b0566e60ef316a93df49816a8c0fc3a6653151cbffff9e53e536a2"
     PKG_URL="https://github.com/LubanCat/kernel/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
     ;;
@@ -102,6 +102,11 @@ post_patch() {
     # restore the required Module.symvers from an earlier build
     cp -p ${PKG_INSTALL}/.image/Module.symvers ${PKG_BUILD}
   fi
+
+  if [[ "${LINUX}" = "rk356x" ]]; then
+    cp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/dts/* ${PKG_BUILD}/arch/arm64/boot/dts/rockchip
+  fi
+
 }
 
 make_host() {

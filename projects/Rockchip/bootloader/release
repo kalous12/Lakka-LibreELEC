@@ -3,8 +3,12 @@
 
 SRCDIR="${BUILD}"/image/system/usr/share/bootloader
 DSTDIR="${RELEASE_DIR}"/3rdparty/bootloader
+TARGET="${RELEASE_DIR}"/target
+DTB_DIR="${TARGET}"/dtb
 
 mkdir -p "${DSTDIR}"
+mkdir -p "${DTB_DIR}"
+
 if [ -n "${UBOOT_SYSTEM}" ]; then
   if [ -f "${SRCDIR}"/"${UBOOT_FIT_IMAGE}" ]; then
     cp -av "${SRCDIR}"/"${UBOOT_FIT_IMAGE}" "${DSTDIR}" && \
@@ -20,4 +24,5 @@ if [ -n "${UBOOT_SYSTEM}" ]; then
   fi
 fi
 
-cp -av "${SRCDIR}"/"${DEVICE,,}"*.dtb "${DSTDIR}"
+cp -av "${SRCDIR}"/*.dtb "${DSTDIR}"
+cp -av "${SRCDIR}"/*.dtb "${DTB_DIR}"

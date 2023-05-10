@@ -28,19 +28,19 @@ PKG_DEPENDS_TARGET="libdrm"
 #   PKG_CMAKE_OPTS_TARGET+=" -DMALI_ARCH=aarch64-linux-gnu"
 # fi
 
-post_makeinstall_target() {
-  # mkdir -p ${INSTALL}/usr/bin
-  #   cp -v ${PKG_DIR}/scripts/libmali-setup ${INSTALL}/usr/bin
-  # if [ $(ls -1q ${INSTALL}/usr/lib/libmali-*.so | wc -l) -gt 1 ]; then
-  #   ln -sfv /var/lib/libmali/libmali.so ${INSTALL}/usr/lib/libmali.so
-  # fi
-
-  cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
-}
+# post_makeinstall_target() {
+#   # mkdir -p ${INSTALL}/usr/bin
+#   #   cp -v ${PKG_DIR}/scripts/libmali-setup ${INSTALL}/usr/bin
+#   # if [ $(ls -1q ${INSTALL}/usr/lib/libmali-*.so | wc -l) -gt 1 ]; then
+#   #   ln -sfv /var/lib/libmali/libmali.so ${INSTALL}/usr/lib/libmali.so
+#   # fi
+#   # cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
+#   echo "cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}" >> /home/zerok/game/Lakka-LibreELEC/test
+# }
 
 post_install() {
 
   cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
   cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
-
+  
 }

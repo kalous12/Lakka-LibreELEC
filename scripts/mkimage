@@ -237,7 +237,15 @@ EOF
 
   for dtb in "${RELEASE_DIR}/3rdparty/bootloader/"*.dtb ; do
     if [ -f "${dtb}" ]; then
-      mcopy "${dtb}" ::/$(basename "${dtb}")
+      if [ -d "${RELEASE_DIR}/target/dtb" ]; then
+        mcopy -/ "${RELEASE_DIR}/target/dtb" ::/dtb
+        DTB_2="dtb/${DTB}"
+        QUIET=""
+      else
+        mcopy "${dtb}" ::/$(basename "${dtb}")
+        DTB_2="${DTB}"
+        QUIET="quiet"
+      fi
     fi
   done
 
@@ -265,8 +273,8 @@ elif [ "${BOOTLOADER}" = "u-boot" -a -n "${UBOOT_SYSTEM}" ]; then
     cat << EOF > "${LE_TMP}/extlinux/extlinux.conf"
 LABEL ${DISTRO}
   LINUX /${KERNEL_NAME}
-  FDT /${DTB}
-  APPEND boot=UUID=${UUID_SYSTEM} disk=UUID=${UUID_STORAGE} quiet ${EXTRA_CMDLINE}
+  FDT /${DTB_2}
+  APPEND boot=UUID=${UUID_SYSTEM} disk=UUID=${UUID_STORAGE} $QUIET ${EXTRA_CMDLINE}
 EOF
 
     mcopy -s "${LE_TMP}/extlinux" ::
