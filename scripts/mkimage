@@ -237,15 +237,7 @@ EOF
 
   for dtb in "${RELEASE_DIR}/3rdparty/bootloader/"*.dtb ; do
     if [ -f "${dtb}" ]; then
-      if [ -d "${RELEASE_DIR}/target/dtb" ]; then
-        mcopy -/ "${RELEASE_DIR}/target/dtb" ::/dtb
-        DTB_2="dtb/${DTB}"
-        QUIET=""
-      else
-        mcopy "${dtb}" ::/$(basename "${dtb}")
-        DTB_2="${DTB}"
-        QUIET="quiet"
-      fi
+      mcopy "${dtb}" ::/$(basename "${dtb}"
     fi
   done
 
@@ -260,8 +252,14 @@ elif [ "${BOOTLOADER}" = "u-boot" -a -n "${UBOOT_SYSTEM}" ]; then
   DTB="$(${SCRIPTS}/uboot_helper ${PROJECT} ${DEVICE} ${UBOOT_SYSTEM} dtb)"
   if [ -n "${DTB}" ]; then
 
-    if [ -f "${RELEASE_DIR}/3rdparty/bootloader/${DTB}" ]; then
-      mcopy "${RELEASE_DIR}/3rdparty/bootloader/${DTB}" ::
+    if [ -d "${RELEASE_DIR}/target/dtb" ]; then
+      mcopy -/ "${RELEASE_DIR}/target/dtb" ::/dtb
+      DTB_2="dtb/${DTB}"
+      QUIET=""
+    else
+      mcopy "${RELEASE_DIR}/3rdparty/bootloader/${DTB}" :: 
+      DTB_2="${DTB}"
+      QUIET="quiet"
     fi
 
     if [ -d "${RELEASE_DIR}/3rdparty/bootloader/overlays" ]; then
