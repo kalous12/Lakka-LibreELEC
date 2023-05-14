@@ -237,7 +237,7 @@ EOF
 
   for dtb in "${RELEASE_DIR}/3rdparty/bootloader/"*.dtb ; do
     if [ -f "${dtb}" ]; then
-      mcopy "${dtb}" ::/$(basename "${dtb}"
+      mcopy "${dtb}" ::/$(basename "${dtb}")
     fi
   done
 
