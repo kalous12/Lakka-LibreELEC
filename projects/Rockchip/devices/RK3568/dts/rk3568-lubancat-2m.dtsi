@@ -21,9 +21,6 @@
 / {
 	compatible = "rockchip,lubancat-2m", "rockchip,rk3568";
 
-	chosen: chosen {
-		bootargs = "earlycon=uart8250,mmio32,0xfe660000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rw rootwait";
-	};
 
 	fiq-debugger {
 		compatible = "rockchip,fiq-debugger";
@@ -83,7 +80,7 @@
 	};
 
 	rk809_sound: rk809-sound {
-		status = "okay";
+		status = "disabled";
 		compatible = "simple-audio-card";
 		simple-audio-card,format = "i2s";
 		simple-audio-card,name = "rockchip,rk809-codec";
@@ -418,13 +415,13 @@
 			spk-volume = <3>;
 			//mic-in-differential;
 			capture-volume = <0>;
-			status = "okay";
+			status = "disabled";
 		};
 	};
 };
 
 &i2s1_8ch {
-	status = "okay";
+	status = "disabled";
 	rockchip,clk-trcm = <1>;
 	pinctrl-names = "default";
 	pinctrl-0 = <&i2s1m0_sclktx

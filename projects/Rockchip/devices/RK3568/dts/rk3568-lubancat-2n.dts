@@ -37,10 +37,6 @@
 		ethernet3 = &rtl8125_1;
 	};
 
-	chosen: chosen {
-		bootargs = "earlycon=uart8250,mmio32,0xfe660000 console=ttyFIQ0 root=PARTUUID=614e0000-0000 rw rootwait";
-	};
-
 	fiq-debugger {
 		compatible = "rockchip,fiq-debugger";
 		rockchip,serial-id = <2>;
@@ -263,7 +259,7 @@
 	};
 
 	rk809_sound: rk809-sound {
-		status = "okay";
+		status = "disabled";
 		compatible = "simple-audio-card";
 		simple-audio-card,format = "i2s";
 		simple-audio-card,name = "rockchip,rk809-codec";
@@ -375,7 +371,7 @@
 };
 
 &i2s1_8ch {
-	status = "okay";
+	status = "disabled";
 	rockchip,clk-trcm = <1>;
 	/delete-property/ rockchip,playback-only;
 	pinctrl-names = "default";
@@ -746,7 +742,7 @@
 			hp-volume = <20>;
 			spk-volume = <3>;
 			//mic-in-differential;
-			status = "okay";
+			status = "disabled";
 		};
 	};
 };
