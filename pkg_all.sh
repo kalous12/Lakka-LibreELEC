@@ -51,6 +51,7 @@ targets="\
 	Rockchip|RK3328|aarch64| \
 	Rockchip|RK3399|aarch64| \
 	Rockchip|RK3568|aarch64| \
+	Rockchip|RK3588|aarch64| \
 	RPi|GPICase|arm| \
 	RPi|Pi02GPi|arm| \
 	RPi|RPi|arm| \

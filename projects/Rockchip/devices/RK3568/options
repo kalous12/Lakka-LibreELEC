@@ -21,7 +21,7 @@
     esac
 
   # # disable FIT target
-    UBOOT_FIT_IMAGE="rk3566-uboot"
+    UBOOT_FIT_IMAGE="rk35xx-uboot"
 
   # Kernel target
     KERNEL_TARGET="Image"
@@ -47,5 +47,5 @@
   # # debug tty path
   # DEBUG_TTY="/dev/ttyFIQ0"
 
-  LINUX="rk356x"
+  LINUX="rk3588"
 

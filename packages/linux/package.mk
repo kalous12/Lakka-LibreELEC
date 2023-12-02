@@ -32,7 +32,13 @@ case "${LINUX}" in
     PKG_SHA256="a42280b3a1b0566e60ef316a93df49816a8c0fc3a6653151cbffff9e53e536a2"
     PKG_URL="https://github.com/LubanCat/kernel/archive/${PKG_VERSION}.tar.gz"
     PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
-    ;;
+    ;; 
+  rk3588)
+    PKG_VERSION="5845b07897c457c97c987cb28022eaf39dcaffb6" # lubancat4 5.10.160
+    PKG_SHA256="d2ff5bb16a809ff5e888cdd540728eb90cde00f7b5b93dafe2aa66aa99bd896f"
+    PKG_URL="https://github.com/Joshua-Riek/linux-rockchip/archive/5845b07897c457c97c987cb28022eaf39dcaffb6.tar.gz"
+    PKG_SOURCE_NAME="linux-${LINUX}-${PKG_VERSION}.tar.gz"
+    ;; 
   L4T)
     PKG_VERSION=${DEVICE}
     PKG_URL="l4t-kernel-sources"
@@ -55,6 +61,7 @@ case "${LINUX}" in
     PKG_PATCH_DIRS="default ${DISTRO}-default"
     ;;
 esac
+
 
 PKG_KERNEL_CFG_FILE=$(kernel_config_path) || die
 
@@ -327,7 +334,7 @@ pre_make_target() {
     ${PKG_BUILD}/scripts/config --enable CONFIG_HID_PID
   fi
 
-  if [ ! "${LINUX}" = "L4T" ]; then
+  if [ ! "${LINUX}" = "L4T" ] && [ ! "${LINUX}" = "rk3588" ]; then
     if [ -f "${DISTRO_DIR}/${DISTRO}/kernel_options_overrides" ]; then
       while read OPTION; do
         [ -z "${OPTION}" -o -n "$(echo "${OPTION}" | grep '^#')" ] && continue

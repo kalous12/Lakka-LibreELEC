@@ -1150,6 +1150,19 @@ done
 /usr/bin/busybox mount --move /run /sysroot/run
 /usr/bin/busybox rm -fr /tmp
 
+for i in $(ls /); do
+  echo $(ls -l $i)
+done
+
+echo $(---2 ls -l /sysroot)
+echo $(---3 ls -l /usr/bin)
+echo $(---3 ls -l /usr/bin/sbin)
+
+for i in $(ls /usr/bin); do
+  if [ -d "$i" ] ; then
+    echo $(ls -l $i)
+done
+
 # setup kernel overlays
 /usr/bin/busybox chroot /sysroot /usr/sbin/kernel-overlays-setup
 

@@ -54,6 +54,11 @@ if [ "${DEVICE}" = "RK3568" ]; then
   dd if=u-boot.itb of="${UBOOT_FIT_IMAGE}" seek=16320 conv=fsync,notrunc
 fi
 
+if [ "${DEVICE}" = "RK3588" ]; then
+  dd if=idbloader.img of="${UBOOT_FIT_IMAGE}" seek=0 conv=fsync,notrunc
+  dd if=u-boot.itb of="${UBOOT_FIT_IMAGE}" seek=16320 conv=fsync,notrunc
+fi
+
 if [ -f "${UBOOT_FIT_IMAGE}" ]; then
   cp -av "${UBOOT_FIT_IMAGE}" "${INSTALL}"/usr/share/bootloader
 else

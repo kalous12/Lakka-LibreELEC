@@ -3,7 +3,7 @@
 
 
 if [ -n "${UBOOT_SYSTEM}" ]; then
-  BOOTLOADER_PATH="${RELEASE_DIR}/3rdparty/bootloader/rk3566-uboot"
+  BOOTLOADER_PATH="${RELEASE_DIR}/3rdparty/bootloader/rk35xx-uboot"
   if [ -f "${BOOTLOADER_PATH}" ]; then
     echo "image: burn bootloader to image..."
     dd if="${BOOTLOADER_PATH}" of="${DISK}" seek=64 conv=fsync,notrunc >"${SAVE_ERROR}" 2>&1 || show_error

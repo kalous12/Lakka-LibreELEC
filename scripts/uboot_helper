@@ -271,7 +271,13 @@ devices = \
     'RK3568': {
       'lubancat': {
         'dtb': 'rk3568-lubancat-2.dtb',
-        'config': 'evb-rk3568_defconfig'
+        'config': 'rk3568_defconfig'
+      },
+    },
+    'RK3588': {
+      'lubancat': {
+        'dtb': 'rk3588s-lubancat-4.dtb',
+        'config': 'rk3588_defconfig'
       },
     },
     'RK3399': {

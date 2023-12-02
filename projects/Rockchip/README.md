@@ -30,6 +30,9 @@ This project is for Rockchip SoC devices
 **RK3568**
 * [LubanCat](devices/RK3568)
 
+**RK3588**
+* [LubanCat4](devices/RK3588)
+
 **My single-board computer is not listed, will it be added in the future?**<br />
 If your single-board computer uses a current generation SoC listed on http://opensource.rock-chips.com/wiki_Main_Page the odds are in your favor.
 

@@ -3,17 +3,17 @@
 # Copyright (C) 2017-present Team LibreELEC (https://libreelec.tv)
 
 PKG_NAME="u-boot"
-PKG_VERSION="2022.07"
-PKG_SHA256="92b08eb49c24da14c1adbf70a71ae8f37cc53eeb4230e859ad8b6733d13dcf5e"
+PKG_VERSION="4fd1307a000478e40da027fbd145d636a417e099"
+PKG_SHA256="38c50381d8835d5bede2f1273f5b46ffab2a8ffec57a63474f08f5e2604a5ad3"
 PKG_ARCH="arm aarch64"
 PKG_LICENSE="GPL"
 PKG_SITE="https://www.denx.de/wiki/U-Boot"
-PKG_URL="https://ftp.denx.de/pub/u-boot/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+PKG_URL="https://github.com/kalous12/u-boot-rockchip/archive/${PKG_VERSION}.tar.gz"
 PKG_DEPENDS_TARGET="toolchain openssl:host pkg-config:host Python3:host swig:host rkbin"
 PKG_LONGDESC="Das U-Boot is a cross-platform bootloader for embedded systems."
 
 PKG_STAMP="${UBOOT_SYSTEM} ${UBOOT_TARGET}"
-PKG_PATCH_DIRS="rk3568"
+PKG_PATCH_DIRS="rk35xx"
 
 [ -n "${KERNEL_TOOLCHAIN}" ] && PKG_DEPENDS_TARGET+=" gcc-${KERNEL_TOOLCHAIN}:host"
 
@@ -38,12 +38,6 @@ make_target() {
   # U-Boot needs host openssl for tools - make sure it finds right one
   # setup_pkg_config_host is required
   setup_pkg_config_host
-  if [ "${DEVICE}" = "RK3568" ]; then
-    PKG_RKBIN="$(get_build_dir rkbin)"
-    cp ${PKG_RKBIN}/bin/rk35/rk3568_ddr_1560MHz_v1.13.bin ram_init.bin
-    cp ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/bin/rk3568_bl31_v1.28.elf .
-    UBOOT_MAKE_FLAGS="BL31=rk3568_bl31_v1.28.elf"
-  fi 
 
   if [ -z "${UBOOT_SYSTEM}" ]; then
     echo "UBOOT_SYSTEM must be set to build an image"
@@ -52,8 +46,33 @@ make_target() {
     [ "${BUILD_WITH_DEBUG}" = "yes" ] && PKG_DEBUG=1 || PKG_DEBUG=0
     DEBUG=${PKG_DEBUG} CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" ARCH=arm make mrproper
     [ -n "${UBOOT_FIRMWARE}" ] && find_file_path bootloader/firmware && . ${FOUND_PATH}
+
+    if [ "${DEVICE}" = "RK3568" ]; then
+      PKG_RKBIN="$(get_build_dir rkbin)"
+      cp ${PKG_RKBIN}/bin/rk35/rk3568_ddr_1560MHz_v1.18.bin ddr.bin
+      cp ${PKG_RKBIN}/bin/rk35/rk3568_bl31_v1.43.elf bl31.elf
+      cp ${PKG_RKBIN}/bin/rk35/rk3568_bl32_v2.10.bin tee.bin
+      UBOOT_MAKE_FLAGS="BL31=bl31.elf"
+    fi 
+
+    if [ "${DEVICE}" = "RK3588" ]; then
+      PKG_RKBIN="$(get_build_dir rkbin)"
+      cp ${PKG_RKBIN}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin ddr.bin
+      cp ${PKG_RKBIN}/bin/rk35/rk3588_bl31_v1.40.elf bl31.elf
+      cp ${PKG_RKBIN}/bin/rk35/rk3588_bl32_v1.13.bin tee.bin
+      UBOOT_MAKE_FLAGS="BL31=bl31.elf"
+    fi 
+
     DEBUG=${PKG_DEBUG} CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" ARCH=arm make HOSTCC="${HOST_CC}" HOSTCFLAGS="-I${TOOLCHAIN}/include" HOSTLDFLAGS="${HOST_LDFLAGS}" $(${ROOT}/${SCRIPTS}/uboot_helper ${PROJECT} ${DEVICE} ${UBOOT_SYSTEM} config)
-    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" ARCH=arm  make ${UBOOT_TARGET} HOSTCC="${HOST_CC}" HOSTCFLAGS="-I${TOOLCHAIN}/include" HOSTLDFLAGS="${HOST_LDFLAGS}" CONFIG_MKIMAGE_DTC_PATH="scripts/dtc/dtc" ${UBOOT_MAKE_FLAGS}
+    CROSS_COMPILE="${TARGET_KERNEL_PREFIX}" LDFLAGS="" ARCH=arm  make ${UBOOT_TARGET} ${UBOOT_MAKE_FLAGS} spl/u-boot-spl.bin u-boot.dtb u-boot.itb
+    
+    if [ "${DEVICE}" = "RK3568" ]; then
+    tools/mkimage -n rk3568 -T rksd -d ddr.bin:spl/u-boot-spl.bin idbloader.img
+    fi
+
+    if [ "${DEVICE}" = "RK3588" ]; then
+    ./tools/mkimage -n rk3588 -T rksd -d ddr.bin:spl/u-boot-spl.bin idbloader.img
+    fi
   fi
 }
 
