@@ -27,7 +27,7 @@
     KERNEL_TARGET="Image"
 	  OPENGLES="libmali"
   # Mali GPU family
-    MALI_FAMILY="g52"
+    MALI_FAMILY="g610"
     GRAPHIC_DRIVERS="panfrost"
 
   # kernel serial console

@@ -1,0 +1,10 @@
+prefix=/usr
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: OpenCL
+Description: Mali GPU User-Space Binary Driver Wrappers
+Version: 1.2
+Requires: libdrm
+Libs: -L${libdir} -lmali -lOpenCL
+Cflags:-I${includedir}

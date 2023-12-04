@@ -18,9 +18,9 @@ PKG_DEPENDS_TARGET="libdrm"
 #   PKG_DEPENDS_TARGET+=" wayland"
 # fi
 
-if [ "${DEVICE}" = "RK3588" ]; then
-    PKG_DEPENDS_TARGET+=" wayland wayland-protocols"
-fi
+# if [ "${DEVICE}" = "RK3588" ]; then
+#     PKG_DEPENDS_TARGET+=" wayland wayland-protocols"
+# fi
 
 # listcontains "${MALI_FAMILY}" "4[0-9]+" && PKG_DEPENDS_TARGET+=" mali-utgard"
 # listcontains "${MALI_FAMILY}" "t[0-9]+" && PKG_DEPENDS_TARGET+=" mali-midgard"
@@ -44,16 +44,16 @@ fi
 
 post_install() {
 
-  if [ "${DEVICE}" = "RK3568" ]; then
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
+  if [ "${MALI_FAMILY}" = "g52" ]; then
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g52/usr ${INSTALL}
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g52/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
   fi 
 
-  if [ "${DEVICE}" = "RK3588" ]; then
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
+  if [ "${MALI_FAMILY}" = "g610" ]; then
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g610/usr ${INSTALL}
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g610/usr ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
 
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/lib ${INSTALL}
-    cp -rfp ${ROOT}/projects/${PROJECT}/devices/${DEVICE}/gpu/lib ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g610/lib ${INSTALL}
+    cp -a ${ROOT}/projects/${PROJECT}/gpu/g610/lib ${INSTALL}/../../toolchain/aarch64-libreelec-linux-gnueabi/sysroot
   fi 
 }
